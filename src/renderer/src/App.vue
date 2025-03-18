@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Popup from './views/Popup.vue'
 
-const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 </script>
 
 <template>
