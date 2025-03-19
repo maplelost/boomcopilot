@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { uIOhook, UiohookMouseEvent } from 'uiohook-napi'
+import { uIOhook, UiohookKey, UiohookMouseEvent } from 'uiohook-napi'
 
 function createWindow(): void {
   // Create the browser window.
@@ -85,7 +85,8 @@ app.on('window-all-closed', () => {
 // * 监听鼠标中键按下
 uIOhook.on('mousedown', (e: UiohookMouseEvent) => {
   if (e.button === 3) {
-    console.log('中键按下')
+    uIOhook.keyTap(UiohookKey.C, [UiohookKey.Ctrl])
+    console.log('middle mouse button clicked')
   }
 })
 
