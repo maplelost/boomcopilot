@@ -83,10 +83,32 @@ app.on('window-all-closed', () => {
  */
 
 // * 监听鼠标中键按下
+const { clipboard } = require('electron')
+const clipboardEx = require('electron-clipboard-ex')
+
 uIOhook.on('mousedown', (e: UiohookMouseEvent) => {
   if (e.button === 3) {
+    const last_file_paths = clipboardEx.readFilePaths()
+    const last_text = clipboard.readText()
+    const last_img = clipboard.readImage()
     uIOhook.keyTap(UiohookKey.C, [UiohookKey.Ctrl])
-    console.log('middle mouse button clicked')
+
+    setTimeout(() => {
+      const new_file_paths = clipboardEx.readFilePaths()
+      const new_text = clipboard.readText()
+      const new_img = clipboard.readImage()
+
+      if (JSON.stringify(new_file_paths) !== JSON.stringify(last_file_paths)) {
+        console.log('文件路径改变', new_file_paths)
+      } else if (JSON.stringify(new_img) !== JSON.stringify(last_img)) {
+        console.log('图片改变')
+      } else if (JSON.stringify(new_text) !== JSON.stringify(last_text)) {
+        // 判断一下是否是特殊的字符，例如 &#10;\n\r\t, 无法看见的 空格 换行 制表符
+        if (new_text.includes('&#10;') || new_text.includes('\n') || new_text.includes('\r') || new_text.includes('\t')) {
+          console.log('文本改变', new_text)
+        }
+      }
+    }, 100)
   }
 })
 
