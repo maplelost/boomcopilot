@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -8,23 +8,21 @@ let mainWindow: BrowserWindow
 function createWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 100,
-    maxHeight: 100,
-    minHeight: 100,
-    resizable: false,
-
+    width: 600,
+    height: 300,
     show: false,
+
+    transparent: true,
+    frame: false,
+    skipTaskbar: true,
+    alwaysOnTop: true,
     autoHideMenuBar: true,
+
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
-  })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -57,6 +55,10 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  globalShortcut.register('Alt+Space', () => {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  })
 
   createWindow()
 
