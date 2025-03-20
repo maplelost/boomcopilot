@@ -4,9 +4,10 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { uIOhook, UiohookKey, UiohookMouseEvent } from 'uiohook-napi'
 
+let mainWindow: BrowserWindow
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 100,
     maxHeight: 100,
@@ -98,15 +99,28 @@ uIOhook.on('mousedown', (e: UiohookMouseEvent) => {
       const new_text = clipboard.readText()
       const new_img = clipboard.readImage()
 
-      if (JSON.stringify(new_file_paths) !== JSON.stringify(last_file_paths)) {
-        console.log('文件路径改变', new_file_paths)
-      } else if (JSON.stringify(new_img) !== JSON.stringify(last_img)) {
-        console.log('图片改变')
-      } else if (JSON.stringify(new_text) !== JSON.stringify(last_text)) {
-        // 判断一下是否是特殊的字符，例如 &#10;\n\r\t, 无法看见的 空格 换行 制表符
-        if (new_text.includes('&#10;') || new_text.includes('\n') || new_text.includes('\r') || new_text.includes('\t')) {
-          console.log('文本改变', new_text)
-        }
+      if (
+        JSON.stringify(new_file_paths) !== JSON.stringify(last_file_paths) &&
+        new_file_paths.length > 0
+      ) {
+        mainWindow.webContents.send('sendFromMidBtn', {
+          type: 'file',
+          content: new_file_paths
+        })
+      } else if (JSON.stringify(new_img) !== JSON.stringify(last_img) && new_img.toDataURL()) {
+        mainWindow.webContents.send('sendFromMidBtn', {
+          type: 'image',
+          content: new_img.toDataURL()
+        })
+      } else if (
+        JSON.stringify(new_text) !== JSON.stringify(last_text) &&
+        new_text.length > 0 &&
+        new_text !== '\r\n'
+      ) {
+        mainWindow.webContents.send('sendFromMidBtn', {
+          type: 'text',
+          content: new_text
+        })
       }
     }, 100)
   }

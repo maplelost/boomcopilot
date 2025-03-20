@@ -1,17 +1,39 @@
 <template>
   <div class="popup-container">
     <div class="search-input-container">
-      <input v-model="inputValue" type="text" class="search-input" placeholder="Hi, User" />
+      <input
+        v-model="inputValue"
+        type="text"
+        class="search-input"
+        placeholder="中键复制内容会显示在这里"
+      />
       <button v-if="inputValue" class="clear-button" @click="inputValue = ''">×</button>
-      <div class="icon-button">123</div>
+      <div class="icon-button">{{ contentType }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const inputValue = ref('')
+const contentType = ref('')
+
+window.api.receiveFromMidBtn((event, data: { type: string; content: string }) => {
+  console.log('收到剪贴板内容:', data)
+
+  if (data && data.type) {
+    contentType.value = data.type
+
+    if (data.type === 'text') {
+      inputValue.value = data.content
+    } else if (data.type === 'file') {
+      inputValue.value = `文件: ${Array.isArray(data.content) ? data.content.join(', ') : data.content}`
+    } else if (data.type === 'image') {
+      inputValue.value = '图片内容已复制'
+    }
+  }
+})
 </script>
 
 <style scoped lang="scss">
