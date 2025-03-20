@@ -10,23 +10,24 @@ function createWindow(): void {
   // 获取主屏幕尺寸和缩放比例
   const primaryDisplay = screen.getPrimaryDisplay()
   const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize
-  const scaleFactor = primaryDisplay.scaleFactor
-  console.log('屏幕尺寸:', screenWidth, screenHeight, '缩放比例:', scaleFactor)
 
   // 计算窗口位置，考虑缩放比例
-  const windowX = (screenWidth * scaleFactor - 600) / 2 / scaleFactor
-  const windowY = (screenHeight * scaleFactor * 2) / 5 / scaleFactor
+  const windowWidth = 600
+  const windowHeight = 100
+  const windowX = (screenWidth - windowWidth) / 2
+  const windowY = (screenHeight * 1) / 5
+  console.log(windowX, windowY)
 
   mainWindow = new BrowserWindow({
-    width: 600,
-    height: 100,
+    width: windowWidth,
+    height: windowHeight,
     show: false,
 
     // 无边框弹窗位置
-    x: windowX,
-    y: windowY,
+    x: Math.round(windowX),
+    y: Math.round(windowY),
     transparent: true,
-    frame: false,
+    // frame: false,
     skipTaskbar: true,
     alwaysOnTop: true,
     autoHideMenuBar: true,
@@ -69,10 +70,6 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
-  globalShortcut.register('Alt+Space', () => {
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
-  })
-
   createWindow()
 
   app.on('activate', function () {
@@ -97,6 +94,22 @@ app.on('window-all-closed', () => {
 /**
  * ------------- 额外代码 -------------
  */
+
+app.whenReady().then(() => {
+  // app.on('browser-window-blur', () => {
+  //   toggleWindow()
+  // })
+
+  globalShortcut.register('Alt+Space', () => {
+    toggleWindow()
+  })
+})
+
+function toggleWindow() {
+  mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  // mainWindow.setAlwaysOnTop(mainWindow.isVisible())
+  console.log('toggleWindow', mainWindow.isVisible())
+}
 
 // * 监听鼠标中键按下
 const { clipboard } = require('electron')
