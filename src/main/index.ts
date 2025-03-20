@@ -3,15 +3,28 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { uIOhook, UiohookKey, UiohookMouseEvent } from 'uiohook-napi'
+const { screen } = require('electron')
 
 let mainWindow: BrowserWindow
 function createWindow(): void {
-  // Create the browser window.
+  // 获取主屏幕尺寸和缩放比例
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize
+  const scaleFactor = primaryDisplay.scaleFactor
+  console.log('屏幕尺寸:', screenWidth, screenHeight, '缩放比例:', scaleFactor)
+
+  // 计算窗口位置，考虑缩放比例
+  const windowX = (screenWidth * scaleFactor - 600) / 2 / scaleFactor
+  const windowY = (screenHeight * scaleFactor * 2) / 5 / scaleFactor
+
   mainWindow = new BrowserWindow({
     width: 600,
-    height: 300,
+    height: 100,
     show: false,
 
+    // 无边框弹窗位置
+    x: windowX,
+    y: windowY,
     transparent: true,
     frame: false,
     skipTaskbar: true,
