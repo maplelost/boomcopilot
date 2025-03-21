@@ -6,7 +6,7 @@ declare global {
 
     // declare from ./index.ts
     api: {
-      receiveFromMidBtn: (
+      receiveFromClipboard: (
         callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void
       ) => void
     }

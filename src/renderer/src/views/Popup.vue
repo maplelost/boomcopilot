@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="popup-container">
+  <div class="popup-container">
     <div class="search-input-container">
       <input
         v-model="inputValue"
@@ -10,14 +10,14 @@
       <button v-if="inputValue" class="clear-button" @click="inputValue = ''">×</button>
       <div class="icon-button">{{ contentType }}</div>
     </div>
-  </div> -->
+  </div>
 
-  <div class="popup-container">
+  <!-- <div class="popup-container">
     <n-input-group>
       <n-input v-model:value="inputValue" size="large" placeholder="Hi, User" />
       <n-button type="primary" size="large" ghost> 搜索 </n-button>
     </n-input-group>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
@@ -26,7 +26,7 @@ import { ref, onMounted } from 'vue'
 const inputValue = ref('')
 const contentType = ref('')
 
-window.api.receiveFromMidBtn((event, data: { type: string; content: string }) => {
+window.api.receiveFromClipboard((event, data: { type: string; content: string }) => {
   console.log('收到剪贴板内容:', data)
 
   if (data && data.type) {

@@ -27,7 +27,7 @@ function createWindow(): void {
     x: Math.round(windowX),
     y: Math.round(windowY),
     transparent: true,
-    // frame: false,
+    frame: false,
     skipTaskbar: true,
     autoHideMenuBar: true,
 
@@ -96,10 +96,7 @@ app.on('window-all-closed', () => {
 
 app.whenReady().then(() => {
   app.on('browser-window-blur', () => {
-    if (mainWindow.isVisible()) {
-      mainWindow.hide()
-      mainWindow.setAlwaysOnTop(false)
-    }
+    hideWindow()
   })
 
   globalShortcut.register('Alt+Space', () => {
@@ -109,13 +106,29 @@ app.whenReady().then(() => {
 
 function toggleWindow() {
   if (mainWindow.isVisible()) {
-    mainWindow.hide()
-    mainWindow.setAlwaysOnTop(false)
+    hideWindow()
   } else {
-    mainWindow.setAlwaysOnTop(true)
-    mainWindow.show()
-    mainWindow.focus() // 确保窗口显示在最前面
+    showWindow()
   }
+}
+
+function hideWindow() {
+  mainWindow.hide()
+  mainWindow.setAlwaysOnTop(false)
+}
+
+function showWindow() {
+  mainWindow.show()
+  mainWindow.setAlwaysOnTop(true)
+  mainWindow.focus() // 确保窗口显示在最前面
+}
+
+function sendClipboard(type: string, content: string) {
+  mainWindow.webContents.send('sendClipboard', {
+    type,
+    content
+  })
+  showWindow()
 }
 
 // * 监听鼠标中键按下
@@ -138,24 +151,15 @@ uIOhook.on('mousedown', (e: UiohookMouseEvent) => {
         JSON.stringify(new_file_paths) !== JSON.stringify(last_file_paths) &&
         new_file_paths.length > 0
       ) {
-        mainWindow.webContents.send('sendFromMidBtn', {
-          type: 'file',
-          content: new_file_paths
-        })
+        sendClipboard('file', new_file_paths)
       } else if (JSON.stringify(new_img) !== JSON.stringify(last_img) && new_img.toDataURL()) {
-        mainWindow.webContents.send('sendFromMidBtn', {
-          type: 'image',
-          content: new_img.toDataURL()
-        })
+        sendClipboard('image', new_img.toDataURL())
       } else if (
         JSON.stringify(new_text) !== JSON.stringify(last_text) &&
         new_text.length > 0 &&
         new_text !== '\r\n'
       ) {
-        mainWindow.webContents.send('sendFromMidBtn', {
-          type: 'text',
-          content: new_text
-        })
+        sendClipboard('text', new_text)
       }
     }, 100)
   }

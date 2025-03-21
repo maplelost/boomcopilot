@@ -4,8 +4,8 @@ import { ipcRenderer, IpcRendererEvent } from 'electron'
 
 // Custom APIs for renderer
 const api = {
-  receiveFromMidBtn: (callback: (event: IpcRendererEvent, ...args: any[]) => void) => {
-    ipcRenderer.on('sendFromMidBtn', callback)
+  receiveFromClipboard: (callback: (event: IpcRendererEvent, ...args: any[]) => void) => {
+    ipcRenderer.on('sendClipboard', callback)
   }
 }
 
