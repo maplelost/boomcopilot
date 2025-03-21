@@ -61,7 +61,7 @@ window.api.receiveFromClipboard((event, data: { type: string; content: string })
 }
 
 .clipboard-content {
-  height: 10%;
+  height: 20%;
   overflow: auto;
 }
 </style>

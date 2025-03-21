@@ -94,9 +94,11 @@ app.on('window-all-closed', () => {
  * ------------- 额外代码 -------------
  */
 
+import { getSelectedText } from 'electron-selected-text'
+
 app.whenReady().then(() => {
   app.on('browser-window-blur', () => {
-    hideWindow()
+    // hideWindow()
   })
 
   globalShortcut.register('Alt+Space', () => {
@@ -135,33 +137,34 @@ function sendClipboard(type: string, content: string) {
 const { clipboard } = require('electron')
 const clipboardEx = require('electron-clipboard-ex')
 
-uIOhook.on('mousedown', (e: UiohookMouseEvent) => {
+uIOhook.on('mousedown', async (e: UiohookMouseEvent) => {
   if (e.button === 3) {
-    const last_file_paths = clipboardEx.readFilePaths()
-    const last_text = clipboard.readText()
-    const last_img = clipboard.readImage()
-    uIOhook.keyTap(UiohookKey.C, [UiohookKey.Ctrl])
+    // 文件以及图片
+    // const last_file_paths = clipboardEx.readFilePaths()
+    // const last_img = clipboard.readImage()
+    // uIOhook.keyTap(UiohookKey.C, [UiohookKey.Ctrl])
 
-    setTimeout(() => {
-      const new_file_paths = clipboardEx.readFilePaths()
-      const new_text = clipboard.readText()
-      const new_img = clipboard.readImage()
+    // setTimeout(async () => {
+    //   const new_file_paths = clipboardEx.readFilePaths()
+    //   const new_img = clipboard.readImage()
+    //   const selectedText = await getSelectedText()
 
-      if (
-        JSON.stringify(new_file_paths) !== JSON.stringify(last_file_paths) &&
-        new_file_paths.length > 0
-      ) {
-        sendClipboard('file', new_file_paths)
-      } else if (JSON.stringify(new_img) !== JSON.stringify(last_img) && new_img.toDataURL()) {
-        sendClipboard('image', new_img.toDataURL())
-      } else if (
-        JSON.stringify(new_text) !== JSON.stringify(last_text) &&
-        new_text.length > 0 &&
-        new_text !== '\r\n'
-      ) {
-        sendClipboard('text', new_text)
-      }
-    }, 100)
+    //   if (
+    //     JSON.stringify(new_file_paths) !== JSON.stringify(last_file_paths) &&
+    //     new_file_paths.length > 0
+    //   ) {
+    //     sendClipboard('file', new_file_paths)
+    //   } else if (JSON.stringify(new_img) !== JSON.stringify(last_img) && new_img.toDataURL()) {
+    //     sendClipboard('image', new_img.toDataURL())
+    //   } else if (selectedText !== '' && selectedTesxt !== '\r\n') {
+    //     sendClipboard('text', selectedText)
+    //   }
+    // }, 100)
+
+    const selectedText = await getSelectedText()
+    if (selectedText !== '' && selectedText !== '\r\n') {
+      sendClipboard('text', selectedText)
+    }
   }
 })
 
