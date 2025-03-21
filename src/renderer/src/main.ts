@@ -13,7 +13,9 @@ import {
   NSpace,
   NSplit,
   NText,
-  NInputGroupLabel
+  NInputGroupLabel,
+  NCard,
+  NCode
 } from 'naive-ui'
 
 const naive = create({
@@ -27,7 +29,9 @@ const naive = create({
     NSplit,
     NText,
     NInputGroup,
-    NInputGroupLabel
+    NInputGroupLabel,
+    NCard,
+    NCode
   ]
 })
 
