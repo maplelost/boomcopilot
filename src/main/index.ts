@@ -29,7 +29,6 @@ function createWindow(): void {
     transparent: true,
     // frame: false,
     skipTaskbar: true,
-    alwaysOnTop: true,
     autoHideMenuBar: true,
 
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -96,9 +95,12 @@ app.on('window-all-closed', () => {
  */
 
 app.whenReady().then(() => {
-  // app.on('browser-window-blur', () => {
-  //   toggleWindow()
-  // })
+  app.on('browser-window-blur', () => {
+    if (mainWindow.isVisible()) {
+      mainWindow.hide()
+      mainWindow.setAlwaysOnTop(false)
+    }
+  })
 
   globalShortcut.register('Alt+Space', () => {
     toggleWindow()
@@ -106,9 +108,14 @@ app.whenReady().then(() => {
 })
 
 function toggleWindow() {
-  mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
-  // mainWindow.setAlwaysOnTop(mainWindow.isVisible())
-  console.log('toggleWindow', mainWindow.isVisible())
+  if (mainWindow.isVisible()) {
+    mainWindow.hide()
+    mainWindow.setAlwaysOnTop(false)
+  } else {
+    mainWindow.setAlwaysOnTop(true)
+    mainWindow.show()
+    mainWindow.focus() // 确保窗口显示在最前面
+  }
 }
 
 // * 监听鼠标中键按下
