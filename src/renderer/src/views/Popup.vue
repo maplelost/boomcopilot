@@ -1,14 +1,30 @@
 <template>
   <div class="popup-container">
+    <!-- 上部分：显示复制的文本 -->
+    <div class="copied-text-container" :class="{ hidden: !inputValue }">
+      <div class="copied-text-scroll">
+        <div class="copied-text">{{ inputValue }}</div>
+      </div>
+    </div>
+
+    <!-- 中间部分：输入框 -->
     <div class="search-input-container">
-      <input
-        v-model="inputValue"
-        type="text"
-        class="search-input"
-        placeholder="中键复制内容会显示在这里"
-      />
-      <button v-if="inputValue" class="clear-button" @click="inputValue = ''">×</button>
+      <input v-model="userInput" type="text" class="search-input" placeholder="请输入文本..." />
+      <button v-if="userInput" class="clear-button" @click="userInput = ''">×</button>
       <div class="icon-button">{{ contentType }}</div>
+    </div>
+
+    <!-- 下部分：模型选择 -->
+    <div class="model-selection">
+      <div
+        v-for="model in models"
+        :key="model.id"
+        class="model-item"
+        :class="{ active: selectedModel === model.id }"
+        @click="selectModel(model.id)"
+      >
+        {{ model.name }}
+      </div>
     </div>
   </div>
 
@@ -24,7 +40,19 @@
 import { ref, onMounted } from 'vue'
 
 const inputValue = ref('')
+const userInput = ref('')
 const contentType = ref('')
+const selectedModel = ref('gpt-3.5')
+
+const models = [
+  { id: 'gpt-3.5', name: 'GPT-3.5' },
+  { id: 'gpt-4', name: 'GPT-4' },
+  { id: 'claude', name: 'Claude' }
+]
+
+const selectModel = (modelId: string) => {
+  selectedModel.value = modelId
+}
 
 window.api.receiveFromClipboard((event, data: { type: string; content: string }) => {
   console.log('收到剪贴板内容:', data)
@@ -51,7 +79,53 @@ window.api.receiveFromClipboard((event, data: { type: string; content: string })
   padding: 8px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 12px;
+}
+
+.copied-text-container {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px;
+  height: 120px;
+  transition: all 0.3s ease;
+
+  &.hidden {
+    height: 0;
+    padding: 0;
+    opacity: 0;
+  }
+}
+
+.copied-text-scroll {
+  height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+.copied-text {
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+  line-height: 1.5;
 }
 
 .search-input-container {
@@ -104,5 +178,30 @@ window.api.receiveFromClipboard((event, data: { type: string; content: string })
   height: 24px;
   border: none;
   margin-right: 8px;
+}
+
+.model-selection {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+
+.model-item {
+  padding: 6px 12px;
+  border-radius: 16px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+
+  &.active {
+    background-color: #333;
+    color: white;
+  }
 }
 </style>

@@ -12,15 +12,15 @@ function createWindow(): void {
   const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize
 
   // 计算窗口位置，考虑缩放比例
-  const windowWidth = 600
-  const windowHeight = 100
+  const windowWidth = screenWidth * 0.5
+  const windowHeight = screenHeight * 0.5
   const windowX = (screenWidth - windowWidth) / 2
   const windowY = (screenHeight * 1) / 5
   console.log(windowX, windowY)
 
   mainWindow = new BrowserWindow({
-    width: windowWidth,
-    height: windowHeight,
+    width: Math.round(windowWidth),
+    height: Math.round(windowHeight),
     show: false,
 
     // 无边框弹窗位置
