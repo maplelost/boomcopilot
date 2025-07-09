@@ -98,15 +98,15 @@ import { getSelectedText } from 'electron-selected-text'
 
 app.whenReady().then(() => {
   app.on('browser-window-blur', () => {
-    // hideWindow()
+    hideWindow()
   })
 
   globalShortcut.register('Alt+Space', () => {
-    toggleWindow()
+    toggleWindowShow()
   })
 })
 
-function toggleWindow() {
+function toggleWindowShow() {
   if (mainWindow.isVisible()) {
     hideWindow()
   } else {
