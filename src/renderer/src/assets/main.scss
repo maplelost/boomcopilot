@@ -1,4 +1,8 @@
-html,
+html {
+  height: 100dvh;
+  width: 100dvw;
+}
+
 body {
   height: 100%;
   width: 100%;
@@ -15,5 +19,5 @@ body {
   flex-grow: 1;
   padding: 8px;
 
-  background-color: rgba(228,228,228);
+  background-color: rgba(228, 228, 228);
 }
