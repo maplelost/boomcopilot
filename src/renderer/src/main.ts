@@ -1,38 +1,15 @@
 import './assets/main.scss'
 
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import naive from 'naive-ui'
 import App from './App.vue'
+import router from './router'
 
-import {
-  create,
-  NButton,
-  NInput,
-  NInputGroup,
-  NInputNumber,
-  NSelect,
-  NSpace,
-  NSplit,
-  NText,
-  NInputGroupLabel,
-  NCard,
-  NCode
-} from 'naive-ui'
+const app = createApp(App)
 
-const naive = create({
-  components: [
-    NButton,
-    NInput,
-    NInputGroup,
-    NInputNumber,
-    NSelect,
-    NSpace,
-    NSplit,
-    NText,
-    NInputGroup,
-    NInputGroupLabel,
-    NCard,
-    NCode
-  ]
-})
+app.use(createPinia())
+app.use(router)
+app.use(naive)
 
-createApp(App).use(naive).mount('#app')
+app.mount('#app')

@@ -1,9 +1,9 @@
-<script setup lang="ts">
-import Popup from './views/Popup.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="app-container">
-    <Popup />
+    <router-view />
   </div>
 </template>
+
+<style></style>
