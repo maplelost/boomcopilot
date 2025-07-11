@@ -3,7 +3,7 @@ import Popup from './views/Popup.vue'
 </script>
 
 <template>
-  <n-card class="app-container">
+  <div class="app-container">
     <Popup />
-  </n-card>
+  </div>
 </template>

@@ -10,9 +10,6 @@
       <n-input v-model:value="userInput" size="large" placeholder="Hi, User" />
       <n-button type="primary" size="large"> 搜索 </n-button>
     </n-input-group>
-
-    <!-- 模型选择 -->
-    <n-select v-model:value="selectedModel" size="large" :options="models" />
   </div>
 </template>
 
@@ -22,17 +19,6 @@ import { ref, onMounted } from 'vue'
 const clipboardContent = ref('')
 const userInput = ref('')
 const contentType = ref('')
-const selectedModel = ref('gpt-3.5')
-
-const models = [
-  { id: 'gpt-3.5', name: 'GPT-3.5' },
-  { id: 'gpt-4', name: 'GPT-4' },
-  { id: 'claude', name: 'Claude' }
-]
-
-const selectModel = (modelId: string) => {
-  selectedModel.value = modelId
-}
 
 window.api.receiveFromClipboard((event, data: { type: string; content: string }) => {
   console.log('收到剪贴板内容:', data)
