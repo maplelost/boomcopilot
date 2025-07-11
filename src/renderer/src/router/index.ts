@@ -1,19 +1,32 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import Main from '@/views/main/Main.vue'
+import Popup from '@/views/main/Popup.vue'
+
+export enum MainRoutesNameEnum {
+  POPUP = 'popup'
+}
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      name: 'popup',
-      component: () => import('../views/Popup.vue')
-    },
-    {
-      path: '/main',
       name: 'main',
-      component: () => import('../views/Main.vue')
+      component: Main,
+      children: [
+        {
+          path: `/${MainRoutesNameEnum.POPUP}`,
+          name: MainRoutesNameEnum.POPUP,
+          component: Popup
+        }
+      ]
     }
+    // { 
+    //   path: '/',
+    //   name: 'popup',
+    //   component: Popup
+    // },
   ]
 })
 
-export default router 
+export default router
