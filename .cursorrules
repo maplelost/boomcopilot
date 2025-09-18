@@ -1,0 +1,182 @@
+# BoomCopilot 项目 Cursor Rules
+
+## 开发环境
+- 操作系统: Windows 11
+- 包管理器: pnpm
+- 浏览器: Chrome
+- 终端: PowerShell
+
+## 项目概述
+这是一个基于 Electron + Vue 3 + TypeScript 的桌面应用程序，使用 Vite 作为构建工具，Naive UI 作为 UI 组件库。
+
+## 技术栈
+- **主框架**: Electron 35.x
+- **前端框架**: Vue 3.5.x + TypeScript 5.8.x
+- **构建工具**: Electron-Vite 3.x + Vite 6.x
+- **UI 组件库**: Naive UI 2.42.x
+- **状态管理**: Pinia 3.x
+- **路由**: Vue Router 4.x
+- **样式**: SCSS + Sass-embedded
+- **代码规范**: ESLint + Prettier
+- **包管理器**: pnpm
+
+## 代码规范和最佳实践
+
+### 1. 文件结构规范
+- 主进程代码放在 `src/main/`
+- 预加载脚本放在 `src/preload/`
+- 渲染进程代码放在 `src/renderer/src/`
+- 组件放在 `src/renderer/src/components/`
+- 视图放在 `src/renderer/src/views/`
+- 工具函数放在 `src/renderer/src/utils/`
+- 类型定义放在对应模块的 `types/` 目录或使用 `.d.ts` 文件
+
+### 2. Vue 组件规范
+- 使用 Composition API (`<script setup lang="ts">`)
+- 组件名使用 PascalCase
+- 文件名使用 PascalCase (如 `MyComponent.vue`)
+- 必须使用 TypeScript，script 标签必须包含 `lang="ts"`
+- 使用 `defineProps` 和 `defineEmits` 定义组件接口
+- 优先使用 `ref` 和 `reactive` 进行响应式数据管理
+
+### 3. TypeScript 规范
+- 严格模式开启，遵循 tsconfig 配置
+- 使用接口定义复杂类型
+- 避免使用 `any`，优先使用具体类型或泛型
+- 导出类型使用 `export type` 或 `export interface`
+- 使用 `@/` 别名引用 renderer 源码目录
+
+### 4. Naive UI 使用规范
+- 只导入需要的组件，避免全量导入
+- 在 `src/renderer/src/plugins/naive-ui.ts` 中注册新组件
+- 遵循 Naive UI 的设计规范和 API
+- 使用 Naive UI 的主题系统进行样式定制
+
+### 5. Electron 特定规范
+- 主进程和渲染进程通信使用 IPC
+- 安全相关操作必须在主进程中处理
+- 使用 `@electron-toolkit/preload` 和 `@electron-toolkit/utils`
+- 遵循 Electron 安全最佳实践
+
+### 6. 样式规范
+- 使用 SCSS 语法
+- 样式文件放在 `src/renderer/src/assets/`
+- 组件样式使用 scoped 或 CSS Modules
+- 遵循 BEM 命名规范或语义化类名
+
+### 7. 导入规范
+```typescript
+// 1. Node.js 内置模块
+import { resolve } from 'path'
+
+// 2. 第三方库
+import { defineConfig } from 'electron-vite'
+import { createApp } from 'vue'
+
+// 3. Electron 相关
+import { app, BrowserWindow } from 'electron'
+
+// 4. 项目内部模块 (使用 @ 别名)
+import App from '@/App.vue'
+import router from '@/router'
+```
+
+### 8. 错误处理
+- 使用 try-catch 处理异步操作
+- 主进程错误必须妥善处理，避免应用崩溃
+- 渲染进程错误使用 Vue 的错误边界
+- 记录关键操作的日志
+
+### 9. 性能优化
+- 使用 Vue 3 的 `defineAsyncComponent` 进行组件懒加载
+- 合理使用 `computed` 和 `watch`
+- 避免在模板中使用复杂计算
+- 使用 `shallowRef` 和 `shallowReactive` 优化大对象
+
+### 10. 开发工具配置
+- 使用项目配置的 ESLint 规则
+- 代码提交前自动格式化 (Prettier)
+- 使用 `pnpm` 作为包管理器
+- 遵循 `package.json` 中定义的脚本命令
+
+## 常用命令
+```bash
+# 开发模式
+pnpm dev
+
+# 类型检查
+pnpm typecheck
+
+# 代码检查和格式化
+pnpm lint
+pnpm format
+
+# 构建
+pnpm build
+
+# 打包应用
+pnpm build:win  # Windows
+pnpm build:mac  # macOS
+pnpm build:linux # Linux
+```
+
+## 注意事项
+- 所有新功能开发前先考虑安全性
+- 保持代码简洁和可维护性
+- 遵循现有的项目结构和命名规范
+- 及时更新依赖版本，注意兼容性
+- 编写必要的类型定义和注释
+- 测试主要功能在不同平台的兼容性
+
+## 代码示例模板
+
+### Vue 组件模板
+```vue
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+interface Props {
+  title: string
+  count?: number
+}
+
+interface Emits {
+  (e: 'update', value: number): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  count: 0
+})
+
+const emit = defineEmits<Emits>()
+
+const localCount = ref(props.count)
+
+const displayText = computed(() => `${props.title}: ${localCount.value}`)
+
+const handleClick = () => {
+  localCount.value++
+  emit('update', localCount.value)
+}
+</script>
+
+<template>
+  <div class="component-container">
+    <h3>{{ displayText }}</h3>
+    <n-button @click="handleClick">点击增加</n-button>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.component-container {
+  padding: 16px;
+  
+  h3 {
+    margin-bottom: 12px;
+    color: var(--text-color);
+  }
+}
+</style>
+```
+
+遵循以上规范，确保代码质量和项目的可维护性。
