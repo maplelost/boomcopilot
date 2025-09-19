@@ -97,9 +97,12 @@ app.on('window-all-closed', () => {
 import { IpcChannel } from '@packages/shared/IpcChannel'
 
 app.whenReady().then(() => {
-  app.on('browser-window-blur', () => {
-    hideWindow()
-  })
+  const isProd = process.env.NODE_ENV === 'production'
+  if (isProd) {
+    app.on('browser-window-blur', () => {
+      hideWindow()
+    })
+  }
 
   globalShortcut.register('Alt+Space', () => {
     toggleWindowShow()
