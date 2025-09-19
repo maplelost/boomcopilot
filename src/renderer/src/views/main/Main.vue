@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { MainRoutesNameEnum } from '@/router'
+import { MainRoutesNameEnum } from '@renderer/router'
 
 const router = useRouter()
 router.push({

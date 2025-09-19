@@ -44,7 +44,7 @@
 - 使用接口定义复杂类型
 - 避免使用 `any`，优先使用具体类型或泛型
 - 导出类型使用 `export type` 或 `export interface`
-- 使用 `@/` 别名引用 renderer 源码目录
+- 使用 `@renderer` 别名引用 renderer 源码目录
 
 ### 4. Naive UI 使用规范
 - 只导入需要的组件，避免全量导入
@@ -77,8 +77,8 @@ import { createApp } from 'vue'
 import { app, BrowserWindow } from 'electron'
 
 // 4. 项目内部模块 (使用 @ 别名)
-import App from '@/App.vue'
-import router from '@/router'
+import App from '@renderer/App.vue'
+import router from '@renderer/router'
 ```
 
 ### 8. 错误处理

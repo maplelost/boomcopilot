@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Main from '@/views/main/Main.vue'
-import Popup from '@/views/main/Popup.vue'
+import Main from '@renderer/views/main/Main.vue'
+import Popup from '@renderer/views/main/Popup.vue'
 
 export enum MainRoutesNameEnum {
   POPUP = 'popup'
