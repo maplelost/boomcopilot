@@ -1,11 +1,12 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ipcRenderer, IpcRendererEvent } from 'electron'
+import { IpcChannel } from '@packages/shared/IpcChannel'
 
 // Custom APIs for renderer
 const api = {
-  receiveFromClipboard: (callback: (event: IpcRendererEvent, ...args: any[]) => void) => {
-    ipcRenderer.on('sendClipboard', callback)
+  receiveFromClipboard: (callback: (event: IpcRendererEvent, ...args: any) => void) => {
+    ipcRenderer.on(IpcChannel.App_SendClipboard, callback)
   }
 }
 
