@@ -94,7 +94,6 @@ app.on('window-all-closed', () => {
  * ------------- 额外代码 -------------
  */
 
-import { getSelectedText } from 'electron-selected-text'
 import { IpcChannel } from '@packages/shared/IpcChannel'
 
 app.whenReady().then(() => {
@@ -162,10 +161,12 @@ uIOhook.on('mousedown', async (e: UiohookMouseEvent) => {
     //   }
     // }, 100)
 
-    const selectedText = await getSelectedText()
-    if (selectedText !== '' && selectedText !== '\r\n') {
-      sendClipboard('text', selectedText)
-    }
+    console.log('down')
+
+    // const selectedText = await getSelectedText()
+    // if (selectedText !== '' && selectedText !== '\r\n') {
+    //   sendClipboard('text', selectedText)
+    // }
   }
 })
 
