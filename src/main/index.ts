@@ -26,8 +26,8 @@ function createWindow(): void {
     // 无边框弹窗位置
     x: Math.round(windowX),
     y: Math.round(windowY),
-    transparent: true,
-    frame: false,
+    // transparent: true,
+    // frame: false,
     skipTaskbar: true,
     autoHideMenuBar: true,
 
@@ -97,8 +97,7 @@ app.on('window-all-closed', () => {
 import { IpcChannel } from '@packages/shared/IpcChannel'
 
 app.whenReady().then(() => {
-  const isProd = process.env.NODE_ENV === 'production'
-  if (isProd) {
+  if (!is.dev) {
     app.on('browser-window-blur', () => {
       hideWindow()
     })
