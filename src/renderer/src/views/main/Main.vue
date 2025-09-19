@@ -4,11 +4,11 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { MainRoutesNameEnum } from '@renderer/router'
+import { RouterNameEnum } from '@renderer/router'
 
 const router = useRouter()
 router.push({
-  name: MainRoutesNameEnum.POPUP
+  name: RouterNameEnum.POPUP
 })
 </script>
 

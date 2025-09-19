@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Main from '@renderer/views/main/Main.vue'
 import Popup from '@renderer/views/main/Popup.vue'
 
-export enum MainRoutesNameEnum {
+export enum RouterNameEnum {
   POPUP = 'popup'
 }
 
@@ -15,8 +15,8 @@ const router = createRouter({
       component: Main,
       children: [
         {
-          path: `/${MainRoutesNameEnum.POPUP}`,
-          name: MainRoutesNameEnum.POPUP,
+          path: `/${RouterNameEnum.POPUP}`,
+          name: RouterNameEnum.POPUP,
           component: Popup
         }
       ]
