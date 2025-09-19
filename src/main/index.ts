@@ -95,6 +95,7 @@ app.on('window-all-closed', () => {
  */
 
 import { getSelectedText } from 'electron-selected-text'
+import { IpcChannel } from '@packages/shared/IpcChannel'
 
 app.whenReady().then(() => {
   app.on('browser-window-blur', () => {
@@ -126,7 +127,7 @@ function showWindow() {
 }
 
 function sendClipboard(type: string, content: string) {
-  mainWindow.webContents.send('sendClipboard', {
+  mainWindow.webContents.send(IpcChannel.App_SendClipboard, {
     type,
     content
   })
