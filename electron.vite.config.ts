@@ -8,6 +8,11 @@ const isProd = process.env.NODE_ENV === 'production'
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        '@packages': resolve('packages')
+      }
+    },
     build: {
       sourcemap: isDev
     }
