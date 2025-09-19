@@ -14,13 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 const clipboardContent = ref('')
 const userInput = ref('')
 const contentType = ref('')
 
-window.api.receiveFromClipboard((event, data: { type: string; content: string }) => {
+window.api.receiveFromClipboard((_event, data: { type: string; content: string }) => {
   console.log('收到剪贴板内容:', data)
 
   if (data && data.type) {
